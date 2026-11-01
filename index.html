@@ -68,30 +68,30 @@ box-shadow:3px 3px 0 var(--shadow);transition:transform .12s,box-shadow .12s}
 // Ubah "href" di bawah ini ke alamat file/halaman formulir masing-masing jenis pajak.
 const PAJAK = [
   {nama:"PBB-P2",   warna:"var(--c1)", href:"", sub:[
-    {nama:"PERMOHONAN", href:"Surat%20Permohonan%20PBB-P2%20DKI%20Jakarta.html"}, {nama:"SPOP", href:"Formulir%20SPOP%20PBB-P2%20DKI%20Jakarta.html"}, {nama:"LSPOP", href:"file:///C:/Users/LENOVO/OneDrive%20-%20Badan%20Pendapatan%20Daerah%20Provinsi%20DKI%20Jakarta/1.%20OC%20PENJARINGAN/APLIKASI%20AI/FORMULIR%20PAJAK/Formulir%20SPOP%20PBB-P2%20DKI%20Jakarta.html"},
-    {nama:"SURAT KUASA", href:"file:///C:/Users/LENOVO/OneDrive%20-%20Badan%20Pendapatan%20Daerah%20Provinsi%20DKI%20Jakarta/1.%20OC%20PENJARINGAN/APLIKASI%20AI/FORMULIR%20PAJAK/Surat_Kuasa_Pengurusan_PBB-P2_DKI_Jakarta.html"}, {nama:"PENGUASAAN FISIK", href:"file:///C:/Users/LENOVO/OneDrive%20-%20Badan%20Pendapatan%20Daerah%20Provinsi%20DKI%20Jakarta/1.%20OC%20PENJARINGAN/APLIKASI%20AI/FORMULIR%20PAJAK/Surat%20Pernyataan%20Penguasaan%20Fisik.html"}, {nama:"PEMINDAHBUKUAN", href:"file:///C:/Users/LENOVO/OneDrive%20-%20Badan%20Pendapatan%20Daerah%20Provinsi%20DKI%20Jakarta/1.%20OC%20PENJARINGAN/APLIKASI%20AI/FORMULIR%20PAJAK/Surat%20Permohonan%20Pemindahbukuan.html"}
+    {nama:"PERMOHONAN", href:"Surat%20Permohonan%20PBB-P2%20DKI%20Jakarta.html"}, {nama:"SPOP", href:"Formulir%20SPOP%20PBB-P2%20DKI%20Jakarta.html"}, {nama:"LSPOP", href:"Formulir%20SPOP%20PBB-P2%20DKI%20Jakarta.html"},
+    {nama:"SURAT KUASA", href:"Surat_Kuasa_Pengurusan_PBB-P2_DKI_Jakarta.html"}, {nama:"PENGUASAAN FISIK", href:"Surat%20Pernyataan%20Penguasaan%20Fisik.html"}, {nama:"PEMINDAHBUKUAN", href:"Surat%20Permohonan%20Pemindahbukuan.html"}
   ]},
   {nama:"BPHTB",    warna:"var(--c2)", href:"", sub:[
-    {nama:"SURAT KUASA", href:"file:///C:/Users/LENOVO/OneDrive%20-%20Badan%20Pendapatan%20Daerah%20Provinsi%20DKI%20Jakarta/1.%20OC%20PENJARINGAN/APLIKASI%20AI/FORMULIR%20PAJAK/Surat_Kuasa_Pengurusan_PBB-P2_DKI_Jakarta.html"}, {nama:"PEMINDAH BUKUAN", href:"file:///C:/Users/LENOVO/OneDrive%20-%20Badan%20Pendapatan%20Daerah%20Provinsi%20DKI%20Jakarta/1.%20OC%20PENJARINGAN/APLIKASI%20AI/FORMULIR%20PAJAK/Surat%20Permohonan%20Pemindahbukuan.html"}
+    {nama:"SURAT KUASA", href:"Surat_Kuasa_Pengurusan_PBB-P2_DKI_Jakarta.html"}, {nama:"PEMINDAH BUKUAN", href:"Surat%20Permohonan%20Pemindahbukuan.html"}
   ]},
   {nama:"PAT",      warna:"var(--c3)", href:"", tanpaJudul:true, sub:[
-    {nama:"SPOPD PAT", href:"file:///C:/Users/LENOVO/OneDrive%20-%20Badan%20Pendapatan%20Daerah%20Provinsi%20DKI%20Jakarta/1.%20OC%20PENJARINGAN/APLIKASI%20AI/FORMULIR%20PAJAK/SPOPD%20PAT%20%E2%80%93%20Pajak%20Air%20Tanah.html"}
+    {nama:"SPOPD PAT", href:"SPOPD%20PAT%20%E2%80%93%20Pajak%20Air%20Tanah.html"}
   ]},
   {nama:"PBBKB",    warna:"var(--c4)", href:"", tanpaJudul:true, sub:[
-    {nama:"SPOPD PBBKB", href:"file:///C:/Users/LENOVO/OneDrive%20-%20Badan%20Pendapatan%20Daerah%20Provinsi%20DKI%20Jakarta/1.%20OC%20PENJARINGAN/APLIKASI%20AI/FORMULIR%20PAJAK/SPOPD%20PBBKB%20%E2%80%93%20Pajak%20Bahan%20Bakar%20Kendaraan%20Bermotor.html"}, {nama:"SPTPD PBBKB", href:"file:///C:/Users/LENOVO/OneDrive%20-%20Badan%20Pendapatan%20Daerah%20Provinsi%20DKI%20Jakarta/1.%20OC%20PENJARINGAN/APLIKASI%20AI/FORMULIR%20PAJAK/SPTPD_PBBKB.html"}
+    {nama:"SPOPD PBBKB", href:"SPOPD%20PBBKB%20%E2%80%93%20Pajak%20Bahan%20Bakar%20Kendaraan%20Bermotor.html"}, {nama:"SPTPD PBBKB", href:"SPTPD_PBBKB.html"}
   ]},
   {nama:"REKLAME",  warna:"var(--c5)", href:"", tanpaJudul:true, gambar:true},
   {nama:"RESTORAN", warna:"var(--c6)", href:"", tanpaJudul:true, sub:[
-    {nama:"SPOPD REST", href:"file:///C:/Users/LENOVO/OneDrive%20-%20Badan%20Pendapatan%20Daerah%20Provinsi%20DKI%20Jakarta/1.%20OC%20PENJARINGAN/APLIKASI%20AI/FORMULIR%20PAJAK/SPOPD%20PBJT%20Makanan%20dan_atau%20Minuman.html"}, {nama:"SPTPD REST", href:"file:///C:/Users/LENOVO/OneDrive%20-%20Badan%20Pendapatan%20Daerah%20Provinsi%20DKI%20Jakarta/1.%20OC%20PENJARINGAN/APLIKASI%20AI/FORMULIR%20PAJAK/SPTPD_PBJT_Makanan_dan_atau_Minuman.html"}
+    {nama:"SPOPD REST", href:"SPOPD%20PBJT%20Makanan%20dan_atau%20Minuman.html"}, {nama:"SPTPD REST", href:"SPTPD_PBJT_Makanan_dan_atau_Minuman.html"}
   ]},
   {nama:"HOTEL",    warna:"var(--c7)", href:"", tanpaJudul:true, sub:[
-    {nama:"SPOPD HOTEL", href:"file:///C:/Users/LENOVO/OneDrive%20-%20Badan%20Pendapatan%20Daerah%20Provinsi%20DKI%20Jakarta/1.%20OC%20PENJARINGAN/APLIKASI%20AI/FORMULIR%20PAJAK/SPOPD%20PBJT%20Hotel.html"}, {nama:"SPTPD HOTEL", href:"file:///C:/Users/LENOVO/OneDrive%20-%20Badan%20Pendapatan%20Daerah%20Provinsi%20DKI%20Jakarta/1.%20OC%20PENJARINGAN/APLIKASI%20AI/FORMULIR%20PAJAK/SPTPD_PBJT_Hotel.html"}
+    {nama:"SPOPD HOTEL", href:"SPOPD%20PBJT%20Hotel.html"}, {nama:"SPTPD HOTEL", href:"SPTPD_PBJT_Hotel.html"}
   ]},
   {nama:"PARKIR",   warna:"var(--c8)", href:"", tanpaJudul:true, sub:[
-    {nama:"SPOPD PARKIR", href:"file:///C:/Users/LENOVO/OneDrive%20-%20Badan%20Pendapatan%20Daerah%20Provinsi%20DKI%20Jakarta/1.%20OC%20PENJARINGAN/APLIKASI%20AI/FORMULIR%20PAJAK/SPOPD%20PBJT%20Jasa%20Parkir.html"}, {nama:"SPTPD PARKIR", href:"file:///C:/Users/LENOVO/OneDrive%20-%20Badan%20Pendapatan%20Daerah%20Provinsi%20DKI%20Jakarta/1.%20OC%20PENJARINGAN/APLIKASI%20AI/FORMULIR%20PAJAK/SPTPD_PBJT_Parkir.html"}
+    {nama:"SPOPD PARKIR", href:"SPOPD%20PBJT%20Jasa%20Parkir.html"}, {nama:"SPTPD PARKIR", href:"SPTPD_PBJT_Parkir.html"}
   ]},
   {nama:"HIBURAN",  warna:"var(--c9)", href:"", tanpaJudul:true, sub:[
-    {nama:"SPOPD HIBURAN", href:"file:///C:/Users/LENOVO/OneDrive%20-%20Badan%20Pendapatan%20Daerah%20Provinsi%20DKI%20Jakarta/1.%20OC%20PENJARINGAN/APLIKASI%20AI/FORMULIR%20PAJAK/SPOPD%20PBJT%20Jasa%20Kesenian%20dan%20Hiburan.html"}, {nama:"SPTPD HIBURAN", href:"file:///C:/Users/LENOVO/OneDrive%20-%20Badan%20Pendapatan%20Daerah%20Provinsi%20DKI%20Jakarta/1.%20OC%20PENJARINGAN/APLIKASI%20AI/FORMULIR%20PAJAK/SPTPD_PBJT_Hiburan.html"}
+    {nama:"SPOPD HIBURAN", href:"SPOPD%20PBJT%20Jasa%20Kesenian%20dan%20Hiburan.html"}, {nama:"SPTPD HIBURAN", href:"SPTPD_PBJT_Hiburan.html"}
   ]}
 ];
 const grid = document.getElementById("grid");
