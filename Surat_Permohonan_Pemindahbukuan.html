@@ -48,11 +48,11 @@ input:focus,textarea:focus,select:focus{background:#d6c2f0}
 </head>
 <body>
 <div class="bar"><b>Surat Permohonan Pemindahbukuan – Formulir Pengisian</b>
-<button onclick="tampil()">Tampilkan</button><button onclick="reset()">Kosongkan</button><button id="bpdf" onclick="simpanPDF()">Simpan PDF</button></div>
+<button onclick="tampil()">Tampilkan</button><button onclick="reset()">Kosongkan</button><button id="bpdf" onclick="simpanPDF()">Simpan PDF</button><button id="bctk" onclick="cetak()">Cetak</button></div>
 <div class="wrap"><div class="paper" id="f"></div></div>
 <p class="note">Isi langsung pada formulir. Hasilnya 2 halaman: Surat Permohonan Pemindahbukuan dan Surat Pernyataan. Tanda tangan dan materai dibubuhkan setelah dicetak. Klik “Tampilkan” untuk melihat hasilnya (bisa di-zoom) dan “Simpan PDF” untuk menyimpannya sebagai PDF.</p>
-<div id="pv" role="dialog" aria-label="Pratinjau"><div class="pvbar"><b>Pratinjau</b><button onclick="zoomTo(Z-.1)" aria-label="Perkecil">−</button><span id="zl">100%</span><button onclick="zoomTo(Z+.1)" aria-label="Perbesar">+</button><button onclick="fit()">Pas</button><button onclick="zoomTo(1)">100%</button><button onclick="simpanPDF()">Simpan PDF</button><button onclick="tutup()">Tutup</button></div><div class="pvbody" id="pvbody"><div class="pvsize" id="pvsize"><div class="pvin" id="pvin"></div></div></div></div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<div id="pv" role="dialog" aria-label="Pratinjau"><div class="pvbar"><b>Pratinjau</b><button onclick="zoomTo(Z-.1)" aria-label="Perkecil">−</button><span id="zl">100%</span><button onclick="zoomTo(Z+.1)" aria-label="Perbesar">+</button><button onclick="fit()">Pas</button><button onclick="zoomTo(1)">100%</button><button onclick="simpanPDF()">Simpan PDF</button><button onclick="cetak()">Cetak</button><button onclick="tutup()">Tutup</button></div><div class="pvbody" id="pvbody"><div class="pvsize" id="pvsize"><div class="pvin" id="pvin"></div></div></div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script><script>window.jspdf||document.write('<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"><\/script>')</script>
 <script>
 const $=id=>document.getElementById(id);
 const PW=595.28,PH=841.89; /* A4 */
@@ -224,7 +224,14 @@ function nama(){const m=(vals().nama||'').replace(/[^A-Za-z0-9]+/g,'_').replace(
 async function kirim(blob,fn){
  let d=null;try{d=window.claude&&await claude.use('downloads')}catch(e){}
  if(d){try{await d.save({filename:fn,data:blob})}catch(e){if(!e||e.code!=='declined')alert('PDF tidak dapat disimpan di sini.')}return}
- const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fn;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000)}
+ let touch=false;try{touch=matchMedia('(pointer:coarse)').matches}catch(e){}
+ if(touch&&navigator.canShare&&window.File){
+  try{const file=new File([blob],fn,{type:'application/pdf'});
+   if(navigator.canShare({files:[file]})){await navigator.share({files:[file],title:fn});return}}
+  catch(e){if(e&&e.name==='AbortError')return}}
+ const u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=fn;a.rel='noopener';document.body.appendChild(a);a.click();a.remove();
+ setTimeout(()=>URL.revokeObjectURL(u),60000)}
+(function(){try{if(matchMedia('(pointer:coarse)').matches){const n=document.querySelector('.note');if(n)n.textContent+=' Di HP: jika PDF tidak terunduh, buka halaman ini langsung di Chrome/Safari (bukan di dalam WhatsApp atau aplikasi lain).'}}catch(e){}})();
 async function simpanPDF(){
  const J=window.jspdf&&window.jspdf.jsPDF;if(!J){alert('Pustaka PDF belum termuat. Periksa koneksi lalu coba lagi.');return}
  const btn=$('bpdf'),t=btn.textContent;btn.disabled=true;btn.textContent='Menyiapkan…';
@@ -235,6 +242,59 @@ async function simpanPDF(){
  catch(e){alert('PDF gagal dibuat.')}
  finally{btn.disabled=false;btn.textContent=t}}
 build();defaults();
+</script>
+<script>
+/* Tombol Cetak: menggambar ulang halaman yang sama dengan PDF lalu membuka dialog cetak browser */
+(function(){
+ var G=function(i){return document.getElementById(i)};
+ function cfg(){
+  if(window.CETAK_CFG)return window.CETAK_CFG;
+  if(typeof PW==='number'&&typeof PH==='number')return{pw:PW+'pt',ph:PH+'pt',cw:(PW-3)+'pt',mt:'0'};
+  return{pw:'210mm',ph:'297mm',cw:'207mm',mt:'0'}}
+ var st=document.createElement('style');st.id='cetakcss';
+ st.textContent='#pc{display:none}body.cetaking #pv{visibility:hidden}'
+  +'@media print{body.cetak>*:not(#pc){display:none!important}body.cetak #pc{display:block!important}'
+  +'html.cetak,body.cetak{margin:0!important;padding:0!important;background:#fff!important}'
+  +'body.cetak #pc .pg{break-after:page;page-break-after:always;break-inside:avoid;text-align:center}'
+  +'body.cetak #pc .pg:last-child{break-after:auto;page-break-after:auto}'
+  +'body.cetak #pc canvas{display:block;margin:0 auto;height:auto;max-width:100%}}';
+ document.head.appendChild(st);
+ function bersih(){
+  document.body.classList.remove('cetak');document.documentElement.classList.remove('cetak');
+  var b=G('pc');if(b)b.innerHTML='';var p=G('cetakpg');if(p)p.remove()}
+ window.addEventListener('afterprint',bersih);
+ document.addEventListener('input',bersih,true);
+ document.addEventListener('change',bersih,true);
+ window.cetak=async function(){
+  var C=cfg();
+  document.body.classList.add('cetaking');
+  try{
+   if(document.activeElement&&document.activeElement.blur)document.activeElement.blur();
+   await window.tampil();
+   var src=[].slice.call(document.querySelectorAll('#pvin canvas'));
+   if(!src.length)throw new Error('kosong');
+   var box=G('pc');if(!box){box=document.createElement('div');box.id='pc';document.body.appendChild(box)}
+   box.innerHTML='';
+   src.forEach(function(c){
+    var pg=document.createElement('div');pg.className='pg';
+    var n=document.createElement('canvas');n.width=c.width;n.height=c.height;
+    n.getContext('2d').drawImage(c,0,0);n.style.width=C.cw;
+    if(C.mt&&C.mt!=='0')pg.style.paddingTop=C.mt;
+    pg.appendChild(n);box.appendChild(pg)});
+   window.tutup();
+   var old=G('cetakpg');if(old)old.remove();
+   var ps=document.createElement('style');ps.id='cetakpg';
+   ps.textContent='@page{size:'+C.pw+' '+C.ph+';margin:0}';document.head.appendChild(ps);
+   document.body.classList.add('cetak');document.documentElement.classList.add('cetak');
+   setTimeout(function(){window.print()},80);
+  }catch(e){
+   try{window.tutup()}catch(x){}
+   alert('Gagal menyiapkan cetak. Pastikan koneksi internet aktif (untuk memuat pustaka), lalu coba lagi.')
+  }finally{document.body.classList.remove('cetaking')}
+ };
+ var n=document.querySelector('.note');
+ if(n)n.textContent+=' Tombol “Cetak” langsung membuka dialog cetak dengan ukuran kertas sesuai formulir (di dialog, pilih printer atau “Simpan sebagai PDF”).';
+})();
 </script>
 </body>
 </html>

@@ -93,13 +93,13 @@ body{margin:0;background:var(--bg);color:#111;font:14px/1.4 Arial,Helvetica,sans
 </head>
 <body>
 <div class="tb"><b>Formulir LSPOP PBB-P2 DKI Jakarta – Formulir Pengisian</b>
-<button onclick="tampil()">Tampilkan</button><button onclick="reset()">Kosongkan</button><button id="bpdf" onclick="simpanPDF()">Simpan PDF</button></div>
+<button onclick="tampil()">Tampilkan</button><button onclick="reset()">Kosongkan</button><button id="bpdf" onclick="simpanPDF()">Simpan PDF</button><button id="bctk" onclick="cetak()">Cetak</button></div>
 <div class="wrap"><div class="stage"><article class="sheet" id="sheet"></article></div></div>
 <p class="note">Isi langsung pada formulir (1 kotak = 1 huruf / angka; klik kotak pilihan untuk menandai). Klik “Tampilkan” untuk melihat hasilnya (bisa di-zoom) dan “Simpan PDF” untuk menyimpannya sebagai PDF.</p>
-<div id="pv" role="dialog" aria-label="Pratinjau"><div class="pvbar"><b>Pratinjau</b><button onclick="zoomTo(Z-.1)" aria-label="Perkecil">−</button><span id="zl">100%</span><button onclick="zoomTo(Z+.1)" aria-label="Perbesar">+</button><button onclick="pfit()">Pas</button><button onclick="zoomTo(1)">100%</button><button onclick="simpanPDF()">Simpan PDF</button><button onclick="tutup()">Tutup</button></div><div class="pvbody" id="pvbody"><div class="pvsize" id="pvsize"><div class="pvin" id="pvin"></div></div></div></div>
+<div id="pv" role="dialog" aria-label="Pratinjau"><div class="pvbar"><b>Pratinjau</b><button onclick="zoomTo(Z-.1)" aria-label="Perkecil">−</button><span id="zl">100%</span><button onclick="zoomTo(Z+.1)" aria-label="Perbesar">+</button><button onclick="pfit()">Pas</button><button onclick="zoomTo(1)">100%</button><button onclick="simpanPDF()">Simpan PDF</button><button onclick="cetak()">Cetak</button><button onclick="tutup()">Tutup</button></div><div class="pvbody" id="pvbody"><div class="pvsize" id="pvsize"><div class="pvin" id="pvin"></div></div></div></div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script><script>window.html2canvas||document.write('<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"><\/script>')</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script><script>window.jspdf||document.write('<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"><\/script>')</script>
 <script>
 (function(){
 var JI=["A. Perekaman Data","B. Pemutakhiran Data","C. Penghapusan data","D. Pengarsipan Data","E. Penilaian Individual"];
@@ -218,6 +218,60 @@ window.tutup=function(){$("pv").classList.remove("on");document.body.style.overf
 document.addEventListener("keydown",function(e){if(e.key==="Escape")tutup()});
 window.reset=function(){all.forEach(function(e){e.value=e.dataset.d||""});sheet.querySelectorAll("input.bx").forEach(function(c){c.checked=false})};
 window.simpanPDF=function(){savePdf($("bpdf"))};
+})();
+</script>
+<script>
+window.CETAK_CFG={pw:'215mm',ph:'330mm',cw:'214mm',mt:'0'};
+/* Tombol Cetak: menggambar ulang halaman yang sama dengan PDF lalu membuka dialog cetak browser */
+(function(){
+ var G=function(i){return document.getElementById(i)};
+ function cfg(){
+  if(window.CETAK_CFG)return window.CETAK_CFG;
+  if(typeof PW==='number'&&typeof PH==='number')return{pw:PW+'pt',ph:PH+'pt',cw:(PW-3)+'pt',mt:'0'};
+  return{pw:'210mm',ph:'297mm',cw:'207mm',mt:'0'}}
+ var st=document.createElement('style');st.id='cetakcss';
+ st.textContent='#pc{display:none}body.cetaking #pv{visibility:hidden}'
+  +'@media print{body.cetak>*:not(#pc){display:none!important}body.cetak #pc{display:block!important}'
+  +'html.cetak,body.cetak{margin:0!important;padding:0!important;background:#fff!important}'
+  +'body.cetak #pc .pg{break-after:page;page-break-after:always;break-inside:avoid;text-align:center}'
+  +'body.cetak #pc .pg:last-child{break-after:auto;page-break-after:auto}'
+  +'body.cetak #pc canvas{display:block;margin:0 auto;height:auto;max-width:100%}}';
+ document.head.appendChild(st);
+ function bersih(){
+  document.body.classList.remove('cetak');document.documentElement.classList.remove('cetak');
+  var b=G('pc');if(b)b.innerHTML='';var p=G('cetakpg');if(p)p.remove()}
+ window.addEventListener('afterprint',bersih);
+ document.addEventListener('input',bersih,true);
+ document.addEventListener('change',bersih,true);
+ window.cetak=async function(){
+  var C=cfg();
+  document.body.classList.add('cetaking');
+  try{
+   if(document.activeElement&&document.activeElement.blur)document.activeElement.blur();
+   await window.tampil();
+   var src=[].slice.call(document.querySelectorAll('#pvin canvas'));
+   if(!src.length)throw new Error('kosong');
+   var box=G('pc');if(!box){box=document.createElement('div');box.id='pc';document.body.appendChild(box)}
+   box.innerHTML='';
+   src.forEach(function(c){
+    var pg=document.createElement('div');pg.className='pg';
+    var n=document.createElement('canvas');n.width=c.width;n.height=c.height;
+    n.getContext('2d').drawImage(c,0,0);n.style.width=C.cw;
+    if(C.mt&&C.mt!=='0')pg.style.paddingTop=C.mt;
+    pg.appendChild(n);box.appendChild(pg)});
+   window.tutup();
+   var old=G('cetakpg');if(old)old.remove();
+   var ps=document.createElement('style');ps.id='cetakpg';
+   ps.textContent='@page{size:'+C.pw+' '+C.ph+';margin:0}';document.head.appendChild(ps);
+   document.body.classList.add('cetak');document.documentElement.classList.add('cetak');
+   setTimeout(function(){window.print()},80);
+  }catch(e){
+   try{window.tutup()}catch(x){}
+   alert('Gagal menyiapkan cetak. Pastikan koneksi internet aktif (untuk memuat pustaka), lalu coba lagi.')
+  }finally{document.body.classList.remove('cetaking')}
+ };
+ var n=document.querySelector('.note');
+ if(n)n.textContent+=' Tombol “Cetak” langsung membuka dialog cetak dengan ukuran kertas sesuai formulir (di dialog, pilih printer atau “Simpan sebagai PDF”).';
 })();
 </script>
 </body>
