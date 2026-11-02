@@ -26,11 +26,15 @@ input:focus,textarea:focus,select:focus{background:#d6c2f0}
 .ck input{display:inline-block;width:auto;margin:0}
 .id td{border:0;padding:2px 4px}.id td:first-child{width:150px}.id td:nth-child(2){width:12px}
 .jp td{padding:5px 8px;vertical-align:middle}
+.jp td[colspan="2"]{width:calc(50% - 65px)!important}
+.jp td:last-child{text-align:left;vertical-align:middle;padding-left:0}
+.jp td:last-child input,.jp td:last-child select{margin:0}
 .jp .ck{gap:12px;font-size:16px}
 .jp .ck input{-webkit-appearance:none;appearance:none;width:20px;height:20px;flex:none;background:#fff;border:1.5px solid #8a8a8a;border-radius:4px;cursor:pointer;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 .jp .ck input:checked{background:#1a6ef0 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5 10.5l3.2 3.2L15 6.8' fill='none' stroke='%23fff' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/100% no-repeat;border-color:#1a6ef0}
 .jp td:last-child input,.jp td:last-child select{width:130px;height:39px;background:#fff;border:1px solid #000;border-radius:0;padding:6px 8px;text-align:center;text-align-last:center;font-size:16px}
 .jp td:last-child select{padding:6px 4px}
+.jp td:last-child select:has(option[value=""]:checked){color:#777}
 .jp td:last-child input::placeholder{color:#777;opacity:1}
 .jp td:last-child input:focus,.jp td:last-child select:focus{background:#f3ecff}
 .warn{color:#c00000;font-weight:700;font-style:italic}
@@ -68,7 +72,7 @@ const PW=595.28,PH=841.89; /* A4 */
 const FJ={A:['helvetica','normal'],AB:['helvetica','bold'],AI:['helvetica','italic'],T:['times','normal'],TB:['times','bold']};
 const SUB=[['nama','Nama'],['jalan','Nama Jalan'],['blok','Blok / Kav / Nomor'],['rt','RT / RW'],['kel','Kelurahan'],['kec','Kecamatan'],['kota','Kota']];
 const OBJ=[['jalan','Nama Jalan'],['blok','Blok / Kav / Nomor'],['rt','RT / RW'],['lt','Luas Tanah (M2)'],['lb','Luas Bangunan (M2)'],['jb','Jenis Bangunan']];
-const CB=[['pb','Pendaftaran Baru'],['pn','Pembetulan nama'],['fs','Perubahan Status Menjadi','sel'],['bn','Balik nama'],['pa','Pembetulan Alamat'],['bt','Pembatalan SPPT PBB Tahun','txt','Tahun'],['pg','Penggabungan'],['lt','Perubahan Luas Tanah'],['sb','Perubahan status bangunan menjadi','txt','Menjadi'],['hn','Penghapusan NOP'],['lb','Perubahan Luas Bangunan'],['sl','Salinan Tahun','txt','Tahun']];
+const CB=[['pb','Pendaftaran Baru'],['pn','Pembetulan nama'],['fs','Perubahan Status Menjadi','sel'],['bn','Balik nama'],['pa','Pembetulan Alamat'],['bt','Pembatalan SPPT PBB Tahun','txt','Tahun'],['pg','Penggabungan'],['lt','Perubahan Luas Tanah'],['sb','Perubahan jenis bangunan menjadi','jb'],['hn','Penghapusan NOP'],['lb','Perubahan Luas Bangunan'],['sl','Salinan Tahun','txt','Tahun']];
 const KA=['Jakarta Pusat','Jakarta Utara','Jakarta Barat','Jakarta Selatan','Jakarta Timur'];
 const UP=[['Jakarta Pusat',['Gambir','Tanah Abang','Menteng','Senen','Cempaka Putih','Johar Baru','Kemayoran','Sawah Besar']],['Jakarta Utara',['Penjaringan','Tanjung Priok','Pademangan','Koja','Cilincing','Kelapa Gading']],['Jakarta Barat',['Cengkareng','Grogol Petamburan','Kalideres','Kebon Jeruk','Kembangan','Palmerah','Taman Sari','Tambora']],['Jakarta Selatan',['Kebayoran Baru','Kebayoran Lama','Pesanggrahan','Cilandak','Pasar Minggu','Jagakarsa','Mampang Prapatan','Pancoran','Tebet','Setiabudi']],['Jakarta Timur',['Matraman','Pulo Gadung','Jatinegara','Duren Sawit','Kramat Jati','Makasar','Pasar Rebo','Ciracas','Cipayung','Cakung']]];
 const JB=[['Rumah',['1a. Rumah Tinggal','1b. Rumah Dikontrakkan','1c. Rumah Kos / Guesthouse','1d. Rumah Tinggal yang juga digunakan sebagai Tempat Usaha']],['Perkantoran / Universitas',['2a. Perkantoran Swasta','2b. Perkantoran BUMN / BUMD','2c. Universitas Negeri','2d. Universitas Swasta / Sejenis','2e. Mixed Use']],['Toko / Ruko / Rukan / dll',['4a. Toko / Kios / Apotek / Bengkel Motor','4b. Ruko / Rukan','4c. Restoran / Kafe','4d. Ruko / Rukan yang digunakan sepenuhnya menjadi tempat tinggal']],['Rumah Sakit / Klinik',['5a. Rumah Sakit Pemerintah','5b. Rumah Sakit Swasta','5c. Klinik / Sejenis','5d. Laboratorium Klinik']],'3. Pabrik','4. Gymnasium','5. Gedung Pemerintah','6. Lain-Lain',['Hotel',['7a. Hotel','7b. Wisma','7c. Asrama / Mess','7d. Motel / Losmen / Hostel / Sejenis']],['Bengkel / Gudang / Pertanian / Peternakan',['8a. Bengkel / Showroom Mobil','8b. Gudang','8c. Bangunan Pertanian / Peternakan','8d. Workshop']],['Bangunan Tidak Kena Pajak',['11a. Rumah Ibadat','11b. Kedutaan']],'12. Bangunan Parkir',['Rumah Susun',['13a. Rumah Susun / Apartemen','13b. Kondominium / Kondotel / Apartemen Sewa / Flat','13c. Rusunawa','13d. Rumah Susun Mixed Use']],'14. Kanopi Pompa Bensin','15. Tangki Minyak / Tangki',['Gedung Sekolah',['16a. Gedung Sekolah Negeri','16b. Gedung Sekolah Swasta']],['Objek Khusus',['17a. Jalan Tol','17b. Bandar Udara / Lapangan Terbang','17c. Stasiun Kereta Api / LRT / MRT','17d. Bendungan','17e. Pelabuhan / Dermaga / Galangan Kapal / Jetty','17f. Lapangan Golf','17g. Stadion','17h. Sirkuit Balap','17i. Pabrik Semen / Pupuk','17j. Tempat Rekreasi','17k. Tempat Penampungan / Kilang Minyak, Air, atau Gas','17l. Pipa Minyak, Air, atau Gas','17m. Stasiun Pengisian Bahan Bakar / SPKLU','17n. Menara / SUTET / SUTT','17o. Objek Khusus Lainnya','17p. Terminal Bus / Halte','17q. Tempat Parkir Kontainer / Alat Berat','17r. Pusat Perbelanjaan / Mall / Sejenis','17s. Pasar / Swalayan','17t. Hanggar']]];
@@ -91,7 +95,7 @@ function build(){
  h+=SEC('Surat',1)+TB(R('Wilayah UPPPD',SEL('upp',opt(UP)))+R('Kota administrasi',SEL('adm',opt(KA)))+R('Tanggal',I('tgl','type="date" style="width:170px"')));
  h+=SEC('Wajib pajak (pemohon)')+TB(R('Nama',I('nama'))+R('No. KTP',I('ktp','inputmode="numeric" maxlength="16"'))+R('No. Telp',I('telp','type="tel"'))+R('No. HP',I('hp','type="tel"'))+R('Nama penandatangan',I('ttd','placeholder="kosong = nama pemohon"')));
  h+=SEC('Jenis permohonan')+TB(CB.map(c=>{
-  let ex='';if(c[2]==='sel')ex=SEL('x_fs',opt(['Fasum','Non Fasum']),1);else if(c[2]==='txt')ex=I('x_'+c[0],'placeholder="'+c[3]+'"');
+  let ex='';if(c[2]==='sel')ex=SEL('x_fs',opt(['Fasum','Non Fasum']),1);else if(c[2]==='jb')ex='<select id="x_'+c[0]+'"><option value="">Menjadi</option>'+JBO+'</select>';else if(c[2]==='txt')ex=I('x_'+c[0],'placeholder="'+c[3]+'"');
   return '<tr><td colspan="2" style="width:300px"><label class="ck"><input type="checkbox" id="c_'+c[0]+'">'+c[1]+'</label></td><td>'+ex+'</td></tr>'}).join('')).replace('class="id"','class="id jp"');
  h+=SEC('Permohonan lainnya (opsional)')+TB('<tr><td colspan="3">'+TA('lain')+'</td></tr>');
  h+=SEC('Objek pajak')+TB(R('NOP (18 digit)',I('nop','inputmode="numeric" placeholder="00.00.000.000.000-0000.0"'))+R('Atas Nama',I('an'))+R('Yang berlokasi di',TA('lokasi')));
@@ -147,7 +151,7 @@ function lay(B,V,b){
  const bw=SZ*.85;
  const items=CB.map(c=>{let sg=[{t:c[1]}];
   if(c[2]==='sel')sg=[{t:c[1]+' '},{t:'Fasum',s:V.x_fs!=='Fasum'},{t:' / '},{t:'Non Fasum',s:V.x_fs!=='Non Fasum'},{t:' *)'}];
-  else if(c[2]==='txt')sg=[{t:c[1]+' '},{t:V['x_'+c[0]]||'. . . . . . .'}];
+  else if(c[2]==='txt'||c[2]==='jb')sg=[{t:c[1]+' '},{t:V['x_'+c[0]]||'. . . . . . .'}];
   return{id:c[0],sg,w:bw+4+segW(sg,SZ,'A')}});
  const cw=[0,1,2].map(k=>Math.max(...items.filter((_,i)=>i%3===k).map(a=>a.w)));
  const gx=12;if(cw[0]+cw[1]+cw[2]+2*gx>CW)over=true;
