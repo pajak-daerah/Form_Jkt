@@ -25,6 +25,14 @@ input:focus,textarea:focus,select:focus{background:#d6c2f0}
 .ck{display:flex;align-items:center;gap:6px;cursor:pointer}
 .ck input{display:inline-block;width:auto;margin:0}
 .id td{border:0;padding:2px 4px}.id td:first-child{width:150px}.id td:nth-child(2){width:12px}
+.jp td{padding:5px 8px;vertical-align:middle}
+.jp .ck{gap:12px;font-size:16px}
+.jp .ck input{-webkit-appearance:none;appearance:none;width:20px;height:20px;flex:none;background:#fff;border:1.5px solid #8a8a8a;border-radius:4px;cursor:pointer;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.jp .ck input:checked{background:#1a6ef0 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5 10.5l3.2 3.2L15 6.8' fill='none' stroke='%23fff' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/100% no-repeat;border-color:#1a6ef0}
+.jp td:last-child input,.jp td:last-child select{width:130px;height:39px;background:#fff;border:1px solid #000;border-radius:0;padding:6px 8px;text-align:center;text-align-last:center;font-size:16px}
+.jp td:last-child select{padding:6px 4px}
+.jp td:last-child input::placeholder{color:#777;opacity:1}
+.jp td:last-child input:focus,.jp td:last-child select:focus{background:#f3ecff}
 .warn{color:#c00000;font-weight:700;font-style:italic}
 .judul{margin:14px 0 8px;font-weight:700;text-align:center}
 .note{color:var(--mut);font-size:12px;max-width:820px;margin:8px auto}
@@ -32,6 +40,7 @@ input:focus,textarea:focus,select:focus{background:#d6c2f0}
  :root{padding:0}body{background:#fff}.bar,.note{display:none}.wrap{padding:0;overflow:visible}
  .paper{border:0;box-shadow:none;width:100%;padding:0}
  input,textarea,select{background:transparent!important;color:#111!important;border-bottom:0}
+ .jp td:last-child input,.jp td:last-child select{border:1px solid #000!important}
  @page{size:A4;margin:12mm}
 }
 #pv{position:fixed;inset:0;z-index:50;display:none;flex-direction:column;background:#2b2f36}
@@ -83,7 +92,7 @@ function build(){
  h+=SEC('Wajib pajak (pemohon)')+TB(R('Nama',I('nama'))+R('No. KTP',I('ktp','inputmode="numeric" maxlength="16"'))+R('No. Telp',I('telp','type="tel"'))+R('No. HP',I('hp','type="tel"'))+R('Nama penandatangan',I('ttd','placeholder="kosong = nama pemohon"')));
  h+=SEC('Jenis permohonan')+TB(CB.map(c=>{
   let ex='';if(c[2]==='sel')ex=SEL('x_fs',opt(['Fasum','Non Fasum']),1);else if(c[2]==='txt')ex=I('x_'+c[0],'placeholder="'+c[3]+'"');
-  return '<tr><td colspan="2" style="width:300px"><label class="ck"><input type="checkbox" id="c_'+c[0]+'">'+c[1]+'</label></td><td>'+ex+'</td></tr>'}).join(''));
+  return '<tr><td colspan="2" style="width:300px"><label class="ck"><input type="checkbox" id="c_'+c[0]+'">'+c[1]+'</label></td><td>'+ex+'</td></tr>'}).join('')).replace('class="id"','class="id jp"');
  h+=SEC('Permohonan lainnya (opsional)')+TB('<tr><td colspan="3">'+TA('lain')+'</td></tr>');
  h+=SEC('Objek pajak')+TB(R('NOP (18 digit)',I('nop','inputmode="numeric" placeholder="00.00.000.000.000-0000.0"'))+R('Atas Nama',I('an'))+R('Yang berlokasi di',TA('lokasi')));
  h+=SEC('Data SPPT PBB saat ini')+TB(HD('Isi data sebelum perubahan','warn')+R('Tahun SPPT',I('tahun','inputmode="numeric" maxlength="4" style="width:120px"'))+HD('Data subjek pajak')+flds(SUB,'as_')+HD('Data objek pajak')+flds(OBJ,'ao_'));
